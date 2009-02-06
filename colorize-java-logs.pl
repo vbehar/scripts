@@ -3,8 +3,9 @@
 # simple perl script for colorizing java log output
 # use with : 'tail xxx.log | colorize-java-logs.pl'
 
-s/GRAVE/\e[1;31m$&\e[0;31m/g;
-s/ATTENTION/\e[1;33m$&\e[0;31m/g;
+s/SEVERE/\e[1;33m$&\e[0;31m/g;
+s/GRAVE/\e[1;35m$&\e[0;31m/g;
+s/ATTENTION/\e[1;31m$&\e[0;31m/g;
 s/INFO/\e[1;34m$&\e[0;34m/g;
 s/FIN/\e[1;32m$&\e[0;32m/g;
 
