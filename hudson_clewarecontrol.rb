@@ -7,6 +7,7 @@ HUDSON_URL = ""
 HUDSON_USER = ""
 HUDSON_PASSWORD = ""
 HUDSON_JOBS = %w( )
+HUDSON_USE_ALL_JOBS = false
 
 CLEWARECONTROL = "/usr/bin/clewarecontrol"
 
@@ -25,6 +26,9 @@ def set_color(color)
     when :green, "green"
       puts "setting green"
       `#{CLEWARECONTROL} -as 0 0 -as 1 0 -as 2 1`
+    when :all, "all"
+      puts "setting all"
+      `#{CLEWARECONTROL} -as 0 1 -as 1 1 -as 2 1`
     else
       puts "setting nothing"
       `#{CLEWARECONTROL} -as 0 0 -as 1 0 -as 2 0`
@@ -41,7 +45,7 @@ sess.auth_type = :basic
 resp = sess.get("/api/json")
 if resp.status < 400
   data = JSON.parse resp.body
-  jobs = data["jobs"].select{|job| HUDSON_JOBS.include?job["name"]}
+  jobs = data["jobs"].select{|job| HUDSON_USE_ALL_JOBS || HUDSON_JOBS.include?(job["name"])}
   colors = jobs.collect{|job| job["color"]}.uniq
   if colors.include?"red"
     set_color :red
@@ -55,5 +59,11 @@ if resp.status < 400
 else
   puts "oups"
   puts resp.status
+  10.times do
+    sleep 1
+    set_color :all
+    sleep 1
+    set_color :blank
+  end
 end
 
