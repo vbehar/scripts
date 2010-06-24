@@ -48,22 +48,32 @@ if resp.status < 400
   jobs = data["jobs"].select{|job| HUDSON_USE_ALL_JOBS || HUDSON_JOBS.include?(job["name"])}
   colors = jobs.collect{|job| job["color"]}.uniq
   if colors.include?"red"
-    set_color :red
+    10.times do
+      set_color :none
+      sleep 0.2
+      set_color :red
+      sleep 0.5
+    end
   elsif colors.include?"yellow"
-    set_color :yellow
+    10.times do
+      set_color :none
+      sleep 0.2
+      set_color :yellow
+      sleep 0.5
+    end
   elsif colors.include?"blue"
     set_color :green
   else
-    set_color :blank
+    set_color :none
   end
 else
   puts "oups"
   puts resp.status
   10.times do
-    sleep 1
+    sleep 0.2
     set_color :all
-    sleep 1
-    set_color :blank
+    sleep 0.5
+    set_color :none
   end
 end
 
