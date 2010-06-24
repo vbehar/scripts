@@ -35,6 +35,19 @@ def set_color(color)
   end
 end
 
+def animate_colors(color1, color2, duration)
+  duration.times do
+    set_color color2
+    sleep 0.2
+    set_color color1
+    sleep 0.5
+    set_color color2
+    sleep 0.1
+    set_color color1
+    sleep 0.2
+  end
+end
+
 sess = Patron::Session.new
 sess.timeout = 30
 sess.base_url = HUDSON_URL
@@ -48,19 +61,9 @@ if resp.status < 400
   jobs = data["jobs"].select{|job| HUDSON_USE_ALL_JOBS || HUDSON_JOBS.include?(job["name"])}
   colors = jobs.collect{|job| job["color"]}.uniq
   if ( colors.include?("red") || colors.include?("red_anime") )
-    10.times do
-      set_color :none
-      sleep 0.2
-      set_color :red
-      sleep 0.5
-    end
+    animate_colors :red, :none, 50
   elsif ( colors.include?("yellow") || colors.include?("yellow_anime") )
-    10.times do
-      set_color :none
-      sleep 0.2
-      set_color :yellow
-      sleep 0.5
-    end
+    animate_colors :yellow, :none, 50
   elsif ( colors.include?("blue") || colors.include?("blue_anime") )
     set_color :green
   else # grey disabled aborted
@@ -69,11 +72,6 @@ if resp.status < 400
 else
   puts "oops"
   puts resp.status
-  10.times do
-    sleep 0.2
-    set_color :all
-    sleep 0.5
-    set_color :none
-  end
+  animate_colors :all, :none, 50
 end
 
