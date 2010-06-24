@@ -47,27 +47,27 @@ if resp.status < 400
   data = JSON.parse resp.body
   jobs = data["jobs"].select{|job| HUDSON_USE_ALL_JOBS || HUDSON_JOBS.include?(job["name"])}
   colors = jobs.collect{|job| job["color"]}.uniq
-  if colors.include?"red"
+  if ( colors.include?("red") || colors.include?("red_anime") )
     10.times do
       set_color :none
       sleep 0.2
       set_color :red
       sleep 0.5
     end
-  elsif colors.include?"yellow"
+  elsif ( colors.include?("yellow") || colors.include?("yellow_anime") )
     10.times do
       set_color :none
       sleep 0.2
       set_color :yellow
       sleep 0.5
     end
-  elsif colors.include?"blue"
+  elsif ( colors.include?("blue") || colors.include?("blue_anime") )
     set_color :green
-  else
+  else # grey disabled aborted
     set_color :none
   end
 else
-  puts "oups"
+  puts "oops"
   puts resp.status
   10.times do
     sleep 0.2
