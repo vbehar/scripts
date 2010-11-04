@@ -37,7 +37,8 @@ class LogEntry
   
   def initialize(entry)
     @revision = entry.revision.to_i
-    @date = Time.parse(entry.date) + 3600
+    @date = Time.parse(entry.date)
+    @date = @date.getlocal if @date.utc?
     @author = entry.author
     @message = entry.msg
     @files = []
